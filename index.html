@@ -23,22 +23,40 @@ button {
   height: 70px;
 }
 
+#ntu {
+  width: 100%;
+  height: 70px;
+}
+
+#jcube {
+  width: 100%;
+  height: 70px;
+}
+
 #scene {
-    display: none;
+    display: block;
     margin: auto;
     width: 60%;
     padding: 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: bisque;
 }
 </style>
 </head>
 <body>
 
-    <button onclick="popUp()"><img  id="nus" src="images/nus.jpg" ></button>
-    
+    <button onclick="popUp(1)"><img  id="nus" src="images/nus.jpg" ></button>
+    <button onclick="popUp(2)"><img  id="ntu" src="images/ntu.png" ></button>
+    <button onclick="popUp(3)"><img  id="jcube" src="images/jcube.jpg" ></button>
+
     <div id="scene">
-        <h1>The background-position Property</h1>
-        <p>Here, the background image will be positioned in the center of the element (in this case, the body element).</p>
+        <div id="text">一觉醒来，你回到了2020年一月，请问你接下来的行动？</div>
+        <div id="option-buttons" class="btn-grid">
+            <button class="btn">Option 1</button>
+            <button class="btn">Option 2</button>
+            <button class="btn">Option 3</button>
+            <button class="btn">Option 4</button>
+          </div>
     </div>
 
 
@@ -46,13 +64,365 @@ button {
 
 
     <script type="application/javascript">
-        function popUp() {
-    
+        
+        function popUp(index) {
+            var mapping = {
+                3:1,
+                6:3
+            }
+            if(mapping[curNode] != index){curNode=1000}
             document.getElementById("scene").style.display="block";
-            
+            continueGame();
         }
 
-      
+        function close() {
+    
+        document.getElementById("scene").style.display="none";
+        alert("请去下一个地方");
+        }
+
+        const textElement = document.getElementById('text')
+        const optionButtonsElement = document.getElementById('option-buttons')
+
+        let state = {}
+        let counter = 0;
+        let month = 1;
+        let curNode = 0;
+        
+
+        function startGame() {
+        state = {};
+        curNode = 0;
+        showTextNode(curNode);
+        }
+
+        function continueGame() {
+            showTextNode(curNode);
+        }
+
+        function showTextNode(textNodeIndex) {
+        const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
+        textElement.innerText = textNode.text
+        while (optionButtonsElement.firstChild) {
+            optionButtonsElement.removeChild(optionButtonsElement.firstChild)
+        }
+
+        textNode.options.forEach(option => {
+            if (showOption(option)) {
+            const button = document.createElement('button')
+            button.innerText = option.text
+            button.classList.add('btn')
+            button.addEventListener('click', () => selectOption(option))
+            optionButtonsElement.appendChild(button)
+            }
+        })
+        }
+
+        function showOption(option) {
+        return option.requiredState == null || option.requiredState(state)
+        }
+
+        function selectOption(option) {
+        const nextTextNodeId = option.nextText
+        curNode = nextTextNodeId
+        console.log(curNode)
+        if (nextTextNodeId <= 0) {
+            return startGame()
+        }
+        state = Object.assign(state, option.setState)
+        if (option.runAction){
+        option.runAction();
+        }
+        showTextNode(nextTextNodeId)
+        }
+
+        const textNodes = [
+        {
+            id:0,
+            text: "重回2022",
+            options:[
+                {
+                text:"开始游戏",
+                nextText:1
+                }
+            ]
+        },
+        {
+            id:1,
+            text:"你是这个游戏的主角，你叫李静苛，今天上班好累，早早睡觉了,一觉醒来，发现回到了2020年一月，请问你接下来的行动？",
+            options:[
+                {
+                    text: "认真上课",
+                    nextText: 2,
+                },
+                {
+                    text: "睡觉摆烂",
+                    nextText: 999,
+                },
+                {
+                    text: "参加活动",
+                    nextText: 2,
+                }
+            ]
+        },
+        {
+            id:999,
+            text:"成绩不及格，压力大，没空认识男人-game over",
+            options:[
+                {
+                    text:"Restart",
+                    nextText:-1
+                }
+            ]
+        },
+        {
+            id:2,
+            text:"上课想男人，不能认识，好想认识男人，交男友~",
+            options:[
+                {
+                    text:"去找男朋友",
+                    nextText:3,
+                    runAction: ()=>close()
+                }
+            ]
+        },
+        {
+            id:3,
+            text:"要过年了，想去nus找姐姐一起庆祝聊天，好幸运哦，认识了你的白马王子大帅哥-苏浈杰，好想跟他在一起哦~，看到他你内心小鹿乱撞，下面都要湿了~~，这时你要怎么做?",
+            options:[
+                {
+                    text:"跟他搭话",
+                    nextText:4
+                },
+                {
+                    text:"装清高，不理他",
+                    nextText:998
+                }
+            ]
+        },
+        {
+            id:998,
+            text:"你不理他，他不理你，就像你不理财，财不理你，你们短暂的缘分就这样结束了-game over",
+            options:[
+                {
+                    text:"Restart",
+                    nextText:-1
+                }
+            ]
+        },
+        {
+            id:4,
+            text:"你向你的梦中情人开始搭话，你们有了第一次的接触，聊得很愉快，然后交换了手机号码，以后就可以继续联络了，好开心哦！！！",
+            options:[
+                {
+                    text:"继续",
+                    nextText:5
+                }
+            ]
+        },
+        {
+            id:5,
+            text:"往后的日子你们都有在手机上聊天，你们也越来越了解对方，你慢慢喜欢上他，想跟他交往在一起，还有一起炒饭。情人节要到了，为了增进感情，你们开始去约会",
+            options:[
+            {
+                    text:"去约会",
+                    nextText:6,
+                    runAction: ()=>close()
+                }
+            ]
+        },
+        {
+            id:6,
+            text:"你们去JCUBE滑冰，但是你很笨拙，而且还不小心跌倒撞到头，让他很担心，决定以身相许。这就是你们第一次的滑冰约会。",
+            options:[
+                {
+                    text:"继续",
+                    nextText:7
+                }
+            ]
+        },
+        {
+            id:7,
+            text:"你们去JCUBE滑冰，但是你很笨拙，而且还不小心跌倒撞到头，让他很担心，决定以身相许。这就是你们第一次的滑冰约会。",
+            options:[
+                {
+                    text:"继续",
+                    nextText:7
+                }
+            ]
+        },
+        {
+            id:1000,
+            text:"你在错误的时间点去了不该去的地方，错过了缘分-game over",
+            options:[
+            {
+                    text:"Restart",
+                    nextText:-1
+                }
+            ]
+        },
+        {
+            id:666,
+            text:"",
+            options:[
+                {
+                    text:"",
+                    nextText:667
+                }
+            ]
+        }
+        // {
+        //     id: 1,
+        //     text: 'You wake up in a strange place and you see a jar of blue goo near you.',
+        //     options: [
+        //     {
+        //         text: 'Take the goo',
+        //         setState: { blueGoo: true },
+        //         nextText: 2
+        //     },
+        //     {
+        //         text: 'Leave the goo',
+        //         nextText: 2
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 2,
+        //     text: 'You venture forth in search of answers to where you are when you come across a merchant.',
+        //     options: [
+        //     {
+        //         text: 'Trade the goo for a sword',
+        //         requiredState: (currentState) => currentState.blueGoo,
+        //         setState: { blueGoo: false, sword: true },
+        //         nextText: 3
+        //     },
+        //     {
+        //         text: 'Trade the goo for a shield',
+        //         requiredState: (currentState) => currentState.blueGoo,
+        //         setState: { blueGoo: false, shield: true },
+        //         nextText: 3
+        //     },
+        //     {
+        //         text: 'Ignore the merchant',
+        //         nextText: 3
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 3,
+        //     text: 'After leaving the merchant you start to feel tired and stumble upon a small town next to a dangerous looking castle.',
+        //     options: [
+        //     {
+        //         text: 'Explore the castle',
+        //         nextText: 4
+        //     },
+        //     {
+        //         text: 'Find a room to sleep at in the town',
+        //         nextText: 5
+        //     },
+        //     {
+        //         text: 'Find some hay in a stable to sleep in',
+        //         nextText: 6
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 4,
+        //     text: 'You are so tired that you fall asleep while exploring the castle and are killed by some terrible monster in your sleep.',
+        //     options: [
+        //     {
+        //         text: 'Restart',
+        //         nextText: -1
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 5,
+        //     text: 'Without any money to buy a room you break into the nearest inn and fall asleep. After a few hours of sleep the owner of the inn finds you and has the town guard lock you in a cell.',
+        //     options: [
+        //     {
+        //         text: 'Restart',
+        //         nextText: -1
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 6,
+        //     text: 'You wake up well rested and full of energy ready to explore the nearby castle.',
+        //     options: [
+        //     {
+        //         text: 'Explore the castle',
+        //         nextText: 7
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 7,
+        //     text: 'While exploring the castle you come across a horrible monster in your path.',
+        //     options: [
+        //     {
+        //         text: 'Try to run',
+        //         nextText: 8
+        //     },
+        //     {
+        //         text: 'Attack it with your sword',
+        //         requiredState: (currentState) => currentState.sword,
+        //         nextText: 9
+        //     },
+        //     {
+        //         text: 'Hide behind your shield',
+        //         requiredState: (currentState) => currentState.shield,
+        //         nextText: 10
+        //     },
+        //     {
+        //         text: 'Throw the blue goo at it',
+        //         requiredState: (currentState) => currentState.blueGoo,
+        //         nextText: 11
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 8,
+        //     text: 'Your attempts to run are in vain and the monster easily catches.',
+        //     options: [
+        //     {
+        //         text: 'Restart',
+        //         nextText: -1
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 9,
+        //     text: 'You foolishly thought this monster could be slain with a single sword.',
+        //     options: [
+        //     {
+        //         text: 'Restart',
+        //         nextText: -1
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 10,
+        //     text: 'The monster laughed as you hid behind your shield and ate you.',
+        //     options: [
+        //     {
+        //         text: 'Restart',
+        //         nextText: -1
+        //     }
+        //     ]
+        // },
+        // {
+        //     id: 11,
+        //     text: 'You threw your jar of goo at the monster and it exploded. After the dust settled you saw the monster was destroyed. Seeing your victory you decide to claim this castle as your and live out the rest of your days there.',
+        //     options: [
+        //     {
+        //         text: 'Congratulations. Play Again.',
+        //         nextText: -1
+        //     }
+        //     ]
+        // }
+        ]
+        startGame();
     </script>
 </body>
 </html>
