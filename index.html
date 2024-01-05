@@ -44,7 +44,7 @@ button {
 </style>
 </head>
 <body>
-
+    <div id="failTime"></div>
     <button onclick="popUp(1)"><img  id="nus" src="images/nus.jpg" ></button>
     <button onclick="popUp(2)"><img  id="ntu" src="images/ntu.png" ></button>
     <button onclick="popUp(3)"><img  id="jcube" src="images/jcube.jpg" ></button>
@@ -68,7 +68,9 @@ button {
         function popUp(index) {
             var mapping = {
                 3:1,
-                6:3
+                6:3,
+                9:2,
+                12:1
             }
             if(mapping[curNode] != index){curNode=1000}
             document.getElementById("scene").style.display="block";
@@ -93,6 +95,7 @@ button {
         function startGame() {
         state = {};
         curNode = 0;
+        document.getElementById('failTime').innerHTML = "失败次数-"+counter
         showTextNode(curNode);
         }
 
@@ -127,6 +130,7 @@ button {
         curNode = nextTextNodeId
         console.log(curNode)
         if (nextTextNodeId <= 0) {
+            counter = counter + 1
             return startGame()
         }
         state = Object.assign(state, option.setState)
@@ -222,7 +226,7 @@ button {
         },
         {
             id:5,
-            text:"往后的日子你们都有在手机上聊天，你们也越来越了解对方，你慢慢喜欢上他，想跟他交往在一起，还有一起炒饭。情人节要到了，为了增进感情，你们开始去约会",
+            text:"往后的日子你们都有在手机上聊天，你们也越来越了解对方，你慢慢喜欢上他，想跟他交往在一起，还有一起炒饭。为了增进感情，你们开始去约会，请问要去哪里呢？",
             options:[
             {
                     text:"去约会",
@@ -233,21 +237,77 @@ button {
         },
         {
             id:6,
-            text:"你们去JCUBE滑冰，但是你很笨拙，而且还不小心跌倒撞到头，让他很担心，决定以身相许。这就是你们第一次的滑冰约会。",
+            text:"你们去JCUBE滑冰，但是你很笨拙，而且还不小心跌倒撞到头，让他很担心，决定以身相许。这就是你们第一次的滑冰约会，也有了第一次的肢体接触(你不知道的是，他都硬了，至于他有多硬，你以后就会知道了！)",
             options:[
                 {
                     text:"继续",
-                    nextText:7
+                    nextText:8
                 }
             ]
         },
         {
-            id:7,
-            text:"你们去JCUBE滑冰，但是你很笨拙，而且还不小心跌倒撞到头，让他很担心，决定以身相许。这就是你们第一次的滑冰约会。",
+            id:8,
+            text:"自从你们越来越常接触后，情绪不稳定的你难免会发脾气，有一次你发了大脾气哭哭，然后他就赶来案发现场哄你了。。",
             options:[
                 {
                     text:"继续",
-                    nextText:7
+                    nextText:9,
+                    runAction: ()=>close()
+                }
+            ]
+        },
+        {
+            id:9,
+            text:"看着他如此诚恳地哄你，你会。。。",
+            options:[
+                {
+                    text:"破涕为笑",
+                    nextText:10
+                },
+                {
+                    text:"摆架子",
+                    nextText:997
+                },
+            ]
+        },
+        {
+            id:997,
+            text:"因为你摆架子非常难搞，他也不理你了，你们短暂的缘分就这样结束了-game over",
+            options:[
+                {
+                    text:"Restart",
+                    nextText:-1
+                }
+            ]
+        },
+        {
+            id:10,
+            text:"然后你们就和好了，也度过了快乐的时光，在一起陪伴对方",
+            options:[
+                {
+                    text:"继续",
+                    nextText:11
+                }
+            ]
+        },
+        {
+            id:11,
+            text:"自此以后，你们的感情迅速升温，他对你发出了邀约，开启私密的约会。。。",
+            options:[
+                {
+                    text:"继续",
+                    nextText:12,
+                    runAction: ()=>close()
+                }
+            ]
+        },
+        {
+            id:12,
+            text:"干柴烈火之下，你们kiss kiss了！（虽然还没在一起哈哈:)）",
+            options:[
+                {
+                    text:"继续",
+                    nextText:13
                 }
             ]
         },
