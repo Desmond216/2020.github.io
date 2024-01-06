@@ -19,19 +19,49 @@ button {
 }
 
 #nus {
-  width: 100%;
+    position:absolute;
+   left:500px;
+   top:300px;
+   width: 90px;
   height: 70px;
 }
+/* #ntu {
+  width: 100%;
+  height: 70px;
+} */
 
 #ntu {
-  width: 100%;
+    position:absolute;
+   left:260px;
+   top:300px;
+   width: 90px;
   height: 70px;
 }
 
 #jcube {
-  width: 100%;
+    position:absolute;
+   left:370px;
+   top:260px;
+   width: 90px;
   height: 70px;
 }
+
+#changi {
+    position:absolute;
+   left:900px;
+   top:230px;
+   width: 90px;
+  height: 70px;
+}
+
+#mbs {
+    position:absolute;
+   left:700px;
+   top:250px;
+   width: 90px;
+  height: 70px;
+}
+
 
 #scene {
     display: block;
@@ -48,6 +78,8 @@ button {
     <button onclick="popUp(1)"><img  id="nus" src="images/nus.jpg" ></button>
     <button onclick="popUp(2)"><img  id="ntu" src="images/ntu.png" ></button>
     <button onclick="popUp(3)"><img  id="jcube" src="images/jcube.jpg" ></button>
+    <button onclick="popUp(4)"><img  id="changi" src="images/changi.jpg" ></button>
+    <button onclick="popUp(5)"><img  id="mbs" src="images/mbs.jpg" ></button>
 
     <div id="scene">
         <div id="text">一觉醒来，你回到了2020年一月，请问你接下来的行动？</div>
@@ -70,7 +102,9 @@ button {
                 3:1,
                 6:3,
                 9:2,
-                12:1
+                12:1,
+                14:4,
+                17:5
             }
             if(mapping[curNode] != index){curNode=1000}
             document.getElementById("scene").style.display="block";
@@ -308,6 +342,82 @@ button {
                 {
                     text:"继续",
                     nextText:13
+                }
+            ]
+        },
+        {
+            id:13,
+            text:"很快的来到了考试的季节，考完试后，有一件不得不做的事情，要去哪里呢？",
+            options:[
+            {
+                    text:"继续",
+                    nextText:14,
+                    runAction: ()=>close()
+                }
+            ]
+        },
+        {
+            id:14,
+            text:"没错！就是回家找妈妈，在家里日子犹如度日如年，因为见不到梦中情人，时间非常难熬，只能靠传WhatsaApp来度过这段日子，非常地思念~真的想死他了~",
+            options:[
+                {
+                    text:"继续",
+                    nextText:15
+                }
+            ]
+        },
+        {
+            id:15,
+            text:"随后终于回来了！（就好像你现在这样的心情），又见面了，一起度过了一段快乐的日子",
+            options:[
+                {
+                    text:"继续",
+                    nextText:16
+                }
+            ]
+        },
+        {
+            id:16,
+            text:"有一天，你们相约去了一个重要的地方......",
+            options:[
+            {
+                    text:"继续",
+                    nextText:17,
+                    runAction: ()=>close()
+                }
+            ]
+        },
+        {
+            id:17,
+            text:"在这个浪漫的夜晚，什么都不重要，重要的是他告白了，你愿意接受并跟他在一起吗？",
+            options:[
+            {
+                    text:"接受",
+                    nextText:18
+                },
+                {
+                    text:"拒绝",
+                    nextText:88
+                }
+            ]
+        },
+        {
+            id:18,
+            text:"你们终于在一起了！度过了难忘的夜晚。突然眼前一亮，你睁开了眼睛，发现自己躺在床上，看到了他在旁边睡得很香。经历了这个奇幻的梦境，你决定以后要好好珍惜，不乱发脾气，做个善解人意的女朋友，一起度过接下来的日子---THE END",
+            options:[
+            {
+                    text:"Restart",
+                    nextText:-1
+                }
+            ]
+        },
+        {
+            id:88,
+            text:"你居然选了这个，我不跟你讲话了，再给你一次机会",
+            options:[
+            {
+                    text:"Restart",
+                    nextText:-1
                 }
             ]
         },
